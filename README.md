@@ -38,3 +38,52 @@ Install the following requirements:
    ```
    poetry install
    ```
+## Testing
+
+### Running Tests Locally
+
+1. Run the command
+   ```
+   pytest
+   ```
+
+## Linting / Formatting
+
+### Linters / Formatters
+
+Linters and formatters used to maintain the code best practices patterns for all collaborations.
+
+It can be used in the pipelines/actions to make sure that the PRs are well linted and formatted
+
+Linters:
+  - [flake8](https://flake8.pycqa.org/en/latest/):
+    - [Pyflakes](https://pypi.org/project/pyflakes/) (error linter)
+    - [pycodestyle](https://pypi.org/project/pycodestyle/) (style linter)
+    - [mccabe](https://pypi.org/project/mccabe/) (complexity analysis)
+  - [mypy](https://mypy-lang.org/) (type checker)
+
+Formatters:
+  - [autoflake](https://pypi.org/project/autoflake/) (dead code linter and formatter)
+  - [black](https://github.com/psf/black) (style formatter)
+  - [isort](https://pycqa.github.io/isort/) (style linter and formatter for imports)
+
+### Running Linters / Formatters Locally
+
+If you want to run all the linters and formatters locally on your code, you can use the `pre-commit` command.
+```
+pre-commit run -a
+```
+
+If you want to each of the linters / formatters individually, you can run them as separate commands as they are
+installed as project development dependencies with `poetry`.
+
+```
+# Linters:
+flake8 functions/ layers/src/ tests/
+mypy
+
+# Formatters:
+autoflake .
+black .
+isort functions/ layers/src/ tests/
+```
