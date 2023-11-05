@@ -7,7 +7,67 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+aws-lambda-powertools = {extras = ["aws-sdk"], version = "^2.26.0"}
 
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.5.0"
+autoflake = "^2.2.1"
+black = "^23.10.1"
+flake8 = "^6.1.0"
+isort = "^5.12.0"
+mypy = "^1.6.1"
+pytest = "^7.4.3"
+
+[tool.autoflake]
+in-place = true
+remove-all-unused-imports = true
+remove-unused-variables = true
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+line_length = 120
+known_first_party = "warehouse_manager"
+
+[tool.mypy]
+files = [
+    "functions",
+    "layers/src",
+    "tests"
+]
+python_version = "3.12"
+
+# Enabled mypy's 'strict' mode, but disabled certain options enabled by it as it's too strict and doesn't work well with
+# third-party packages that don't use type hints
+strict = true
+disallow_subclassing_any = false       # sqlalchemy
+disallow_untyped_decorators = false    # aws_lambda_powertools
+
+# Ignore the imports for these third-party packages because these models have opted in for type-checking but they don't
+# support it
+[[tool.mypy.overrides]]
+module = [
+    "pytz",
+    "requests.*"
+]
+ignore_missing_imports = true
+
+# Ignore attr-defined as mocks for our tests use lazy attributes and methods
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disable_error_code = ["attr-defined"]
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "functions",
+    "layers/src"
+]
+testpaths = [
+    "tests/automated"
+]
 
 [build-system]
 requires = ["poetry-core"]
