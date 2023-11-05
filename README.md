@@ -27,8 +27,8 @@ Install the following requirements:
 
 1. Install python *3.9.14* for pyenv, and set the python version for the local environment.
     ```
-    pyenv install 3.12.0
-    pyenv local 3.12.0
+    pyenv install 3.11.6
+    pyenv local 3.11.6
     ```
 2. Create a new virtual environment of the python local version
     ```
