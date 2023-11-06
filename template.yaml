@@ -1,0 +1,76 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Warehouse Manager API - Serverless Architecture
+
+Parameters:
+  AppName:
+    Type: String
+    Description: Name of the application
+    Default: warehouse-manager
+
+Globals:
+  Api:
+    TracingEnabled: true
+    Cors: # see CORS section
+      AllowOrigin: "'https://example.com'"
+      AllowHeaders: "'Content-Type,Authorization,X-Amz-Date'"
+      MaxAge: "'300'"
+  Function:
+    Handler: app.lambda_handler
+    Runtime: python3.11
+    Layers:
+      - !Ref SrcLayer
+      - !Ref DependenciesLayer
+    Timeout: 15
+    Tracing: Active
+    Environment:
+      Variables:
+        LOG_LEVEL: INFO
+        POWERTOOLS_LOGGER_SAMPLE_RATE: 0.1
+        POWERTOOLS_LOGGER_LOG_EVENT: true
+        POWERTOOLS_SERVICE_NAME: warehouse-manager
+
+Resources:
+  CustomerApiEndpoints:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: aws_functions/customer
+      Description: API handler function
+      Events:
+        GetAllTodos:
+         Type: Api
+         Properties:
+           Path: /customers
+           Method: GET
+#        GetTodoById:
+#         Type: Api
+#         Properties:
+#           Path: /customers/{customer_id}
+#           Method: GET
+#        CreateTodo:
+#         Type: Api
+#         Properties:
+#           Path: /customers
+#           Method: POST
+
+  SrcLayer:
+    Type: AWS::Serverless::LayerVersion
+    Description: Shared source code for the API
+    Properties:
+      LayerName: !Sub ${AppName}-src-layer-${Env}
+      ContentUri: layers/src/
+      CompatibleRuntimes:
+        - python3.11
+    Metadata:
+      BuildMethod: python3.11
+
+  DependenciesLayer:
+    Type: AWS::Serverless::LayerVersion
+    Description: Package dependencies for API cloud environment
+    Properties:
+      LayerName: !Sub ${AppName}-dependencies-layer-${Env}
+      ContentUri: layers/dependencies/
+      CompatibleRuntimes:
+        - python3.11
+    Metadata:
+      BuildMethod: python3.11
