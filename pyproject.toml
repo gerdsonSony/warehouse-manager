@@ -10,6 +10,9 @@ python = "^3.11"
 aws-lambda-powertools = {extras = ["aws-sdk"], version = "^2.26.0"}
 requests = "^2.31.0"
 aws-xray-sdk = "^2.12.1"
+python-dotenv = "^1.0.0"
+python-jose = "^3.3.0"
+pydantic = "^2.4.2"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -20,6 +23,7 @@ flake8 = "^6.1.0"
 isort = "^5.12.0"
 mypy = "^1.6.1"
 pytest = "^7.4.3"
+pytest-dotenv = "^0.5.2"
 
 [tool.autoflake]
 in-place = true

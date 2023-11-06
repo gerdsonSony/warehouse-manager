@@ -136,3 +136,4 @@ PyCharm
 
 Manual tests
 /tests/manual/
+/.aws-sam/
