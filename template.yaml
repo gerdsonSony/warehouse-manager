@@ -7,6 +7,10 @@ Parameters:
     Type: String
     Description: Name of the application
     Default: warehouse-manager
+  JWTSecretKey:
+    Type: String
+    Description: Secrete key to generate jwt tokens
+    Default: 4e1626b3600d4bbe6feb2079dbcf36a65b66c8513a9bdeb1acc84956b2bb5b55
 
 Globals:
   Api:
@@ -29,8 +33,20 @@ Globals:
         POWERTOOLS_LOGGER_SAMPLE_RATE: 0.1
         POWERTOOLS_LOGGER_LOG_EVENT: true
         POWERTOOLS_SERVICE_NAME: warehouse-manager
+        JWT_SECRET_KEY: !Ref JWTSecretKey
 
 Resources:
+  AuthenticationEndpoint:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: aws_functions/authentication
+      Description: API handler function
+      Events:
+        GetAllTodos:
+          Type: Api
+          Properties:
+            Path: /authentication
+            Method: POST
   CustomerApiEndpoints:
     Type: AWS::Serverless::Function
     Properties:
