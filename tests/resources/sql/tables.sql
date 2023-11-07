@@ -22,3 +22,15 @@ CREATE TABLE warehouses (
 );
 
 INSERT INTO alembic_version (version_num) VALUES ('b8b9c74b13e1');
+
+-- Running upgrade b8b9c74b13e1 -> 34263ba28278
+
+ALTER TABLE customers MODIFY latitude DOUBLE NOT NULL;
+
+ALTER TABLE customers MODIFY longitude DOUBLE NOT NULL;
+
+ALTER TABLE warehouses MODIFY latitude DOUBLE NOT NULL;
+
+ALTER TABLE warehouses MODIFY longitude DOUBLE NOT NULL;
+
+UPDATE alembic_version SET version_num='34263ba28278' WHERE alembic_version.version_num = 'b8b9c74b13e1';
