@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  mysql-db:
+    image: mysql:8.0-debian
+    ports:
+      - "${MYSQL_PORT}:3306"
+#    volumes:
+#      # 'tables.sql' contains the SQL for the creation of the tables. It was generated in a local virtual environment
+#      # with alembic.
+#      - "./tests/resources/sql/tables.sql:/docker-entrypoint-initdb.d/1.sql"
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_USER: ${MYSQL_USERNAME}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
