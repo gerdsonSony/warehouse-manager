@@ -19,6 +19,10 @@ Parameters:
     Type: String
     Description: Secrete key to generate jwt tokens
     Default: 4e1626b3600d4bbe6feb2079dbcf36a65b66c8513a9bdeb1acc84956b2bb5b55
+  DatabaseHost:
+    Type: String
+    Description: MySQL host
+    Default: host.docker.internal
 
 Globals:
   Api:
@@ -42,6 +46,7 @@ Globals:
         POWERTOOLS_LOGGER_LOG_EVENT: true
         POWERTOOLS_SERVICE_NAME: warehouse-manager
         JWT_SECRET_KEY: !Ref JWTSecretKey
+        DATABASE_HOST: !Ref host.docker.internal
 
 Resources:
   WarehouseManagerAPI:
