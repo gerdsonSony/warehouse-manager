@@ -7,6 +7,14 @@ Parameters:
     Type: String
     Description: Name of the application
     Default: warehouse-manager
+  Env:
+    Type: String
+    Description: Environment in which the application will be deployed
+    AllowedValues:
+      - dev
+      - stag
+      - prod
+    Default: dev
   JWTSecretKey:
     Type: String
     Description: Secrete key to generate jwt tokens
@@ -36,6 +44,21 @@ Globals:
         JWT_SECRET_KEY: !Ref JWTSecretKey
 
 Resources:
+  WarehouseManagerAPI:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Ref AppName
+      StageName: !Ref Env
+      Auth:
+        DefaultAuthorizer: WarehouseManagerTokenAuthorizer
+        Authorizers:
+          WarehouseManagerTokenAuthorizer:
+            FunctionArn: !GetAtt AuthorizerFunction.Arn
+  AuthorizerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Function used to check authentication token
+      CodeUri: aws_functions/authorizer
   AuthenticationEndpoint:
     Type: AWS::Serverless::Function
     Properties:
@@ -56,6 +79,7 @@ Resources:
         GetAllTodos:
          Type: Api
          Properties:
+           RestApiId: !Ref WarehouseManagerAPI
            Path: /customers
            Method: GET
 #        GetTodoById:
