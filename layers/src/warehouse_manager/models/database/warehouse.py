@@ -8,7 +8,9 @@ class Warehouse(BaseMixin):
     __tablename__ = "warehouses"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    name: Mapped[str] = mapped_column(String(256), unique=True, nullable=False)
+    name: Mapped[str] = mapped_column(String(256), nullable=False)
+    latitude: Mapped[int]
+    longitude: Mapped[int]
 
     def __repr__(self) -> str:
         return f"<Warehouse (id={self.id!r}, name={self.name!r})>"
