@@ -38,6 +38,96 @@ Install the following requirements:
    ```
    poetry install
    ```
+
+## API
+
+### Running the serverless API locally
+
+1. To calculate the distances using Google Maps API, create/enable a Google
+developer profile [API key](https://cloud.google.com/docs/authentication/api-keys?sjid=2560348064154854540-NC)
+2. Run the database docker image
+   ```
+   docker compose up mysql-db -d
+   ```
+   Wait a few seconds for the database building.
+3. Build a API local image
+   ```
+   sam build --cached
+   ```
+   **_NOTE:_** Use the --cached option to avoid build unchanged dependencies for every build command
+4. Start the local API passing the Google Maps API key created before
+   <pre>
+   sam local start-api --parameter-overrides "GoogleMapsAPIkey=<i>{YOUR_API_KEY}</i>>"
+   </pre>
+5. After these steps you should be able to make API calls in the URL http://127.0.0.1:3000/{endpoint}
+
+## Endpoints
+
+### /authentication
+
+#### [POST]
+
+It will return a JWT token valid for 10 minutes in the API. This is a demonstration of the Bearer implementation
+
+No users model was implemented, so every empty payload in  this endpoint will return valid (with expiration) token
+in the API.
+
+### /customers
+
+#### [GET]
+
+This endpoint returns all the customers from the database. Pagination is not implemented.
+
+#### [POST]
+
+This is the endpoint used to create a customer
+
+Payload example:
+```json
+{
+    "name": "Customer Name",
+    "latitude": -27.69953233146274,
+    "longitude": -48.51088762083777
+}
+```
+
+### /customers/<customer_id>
+
+#### [GET]
+
+Retrieve a customer searching by its id
+
+### /warehouses
+
+#### [GET]
+
+This endpoint returns all the warehouses from the database. Pagination is not implemented.
+
+#### [POST]
+
+This is the endpoint used to create a warehouse
+
+Payload example:
+```json
+{
+    "name": "Warehouse Name",
+    "latitude": -27.69953233146274,
+    "longitude": -48.51088762083777
+}
+```
+
+### /warehouses/<warehouse_id>
+
+#### [GET]
+
+Retrieve a warehouse searching by its id
+
+### /warehouses/<warehouse_id>/distance/<customer_id>
+
+#### [GET]
+
+This endpoint calculates the distance between a warehouse and a customer using the Google Maps API
+
 ## Testing
 
 ### Running Tests Locally
