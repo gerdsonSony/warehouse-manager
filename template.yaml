@@ -23,6 +23,9 @@ Parameters:
     Type: String
     Description: MySQL host
     Default: host.docker.internal
+  GoogleMapsAPIkey:
+    Type: String
+    Description: Google maps API key
 
 Globals:
   Api:
@@ -47,6 +50,7 @@ Globals:
         POWERTOOLS_SERVICE_NAME: warehouse-manager
         JWT_SECRET_KEY: !Ref JWTSecretKey
         DATABASE_HOST: !Ref host.docker.internal
+        GOOGLE_MAPS_API_KEY: !Ref GoogleMapsAPIkey
 
 Resources:
   WarehouseManagerAPI:
@@ -79,7 +83,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: aws_functions/customer
-      Description: API handler function
+      Description: API handler function for customers endpoints
       Events:
         GetAllCustomers:
          Type: Api
@@ -90,13 +94,45 @@ Resources:
         GetCustomerById:
          Type: Api
          Properties:
+           RestApiId: !Ref WarehouseManagerAPI
            Path: /customers/{customer_id}
            Method: GET
         CreateCustomer:
          Type: Api
          Properties:
+           RestApiId: !Ref WarehouseManagerAPI
            Path: /customers
            Method: POST
+  WarehouseApiEndpoints:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: aws_functions/warehouse
+      Description: API handler function for warehouse endpoints
+      Events:
+        GetAllWarehouses:
+          Type: Api
+          Properties:
+            RestApiId: !Ref WarehouseManagerAPI
+            Path: /warehouses
+            Method: GET
+        GetWarehouseById:
+          Type: Api
+          Properties:
+            RestApiId: !Ref WarehouseManagerAPI
+            Path: /warehouses/{warehouse_id}
+            Method: GET
+        CreateWarehouse:
+          Type: Api
+          Properties:
+            RestApiId: !Ref WarehouseManagerAPI
+            Path: /warehouses
+            Method: POST
+        GetDistanceBetweenWarehouseAndCustomer:
+          Type: Api
+          Properties:
+            RestApiId: !Ref WarehouseManagerAPI
+            Path: /warehouses/{warehouse_id}/distance/{customer_id}
+            Method: GET
 
   SrcLayer:
     Type: AWS::Serverless::LayerVersion
