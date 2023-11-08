@@ -45,21 +45,24 @@ Install the following requirements:
 
 1. To calculate the distances using Google Maps API, create/enable a Google
 developer profile [API key](https://cloud.google.com/docs/authentication/api-keys?sjid=2560348064154854540-NC)
-2. Run the database docker image
+2. Make a copy of the .example.env file and create your local .env file
+   * The unique that is not filled by default is the GOOGLE_MAPS_API_KEY.
+   Fill it with the key created in the first step. 
+3. Run the database docker image
    ```
    docker compose up mysql-db -d
    ```
    Wait a few seconds for the database building.
-3. Build a API local image
+4. Build a API local image
    ```
    sam build --cached
    ```
    **_NOTE:_** Use the --cached option to avoid build unchanged dependencies for every build command
-4. Start the local API passing the Google Maps API key created before
+5. Start the local API passing the Google Maps API key created before
    <pre>
    sam local start-api --parameter-overrides "GoogleMapsAPIkey=<i>{YOUR_API_KEY}</i>>"
    </pre>
-5. After these steps you should be able to make API calls in the URL http://127.0.0.1:3000/{endpoint}
+6. After these steps you should be able to make API calls in the URL http://127.0.0.1:3000/{endpoint}
 
 ## Endpoints
 
