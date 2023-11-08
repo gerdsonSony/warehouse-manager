@@ -81,22 +81,22 @@ Resources:
       CodeUri: aws_functions/customer
       Description: API handler function
       Events:
-        GetAllTodos:
+        GetAllCustomers:
          Type: Api
          Properties:
            RestApiId: !Ref WarehouseManagerAPI
            Path: /customers
            Method: GET
-#        GetTodoById:
-#         Type: Api
-#         Properties:
-#           Path: /customers/{customer_id}
-#           Method: GET
-#        CreateTodo:
-#         Type: Api
-#         Properties:
-#           Path: /customers
-#           Method: POST
+        GetCustomerById:
+         Type: Api
+         Properties:
+           Path: /customers/{customer_id}
+           Method: GET
+        CreateCustomer:
+         Type: Api
+         Properties:
+           Path: /customers
+           Method: POST
 
   SrcLayer:
     Type: AWS::Serverless::LayerVersion
